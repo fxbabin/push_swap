@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/08 22:02:56 by fbabin            #+#    #+#             */
-/*   Updated: 2017/11/14 16:16:07 by fbabin           ###   ########.fr       */
+/*   Updated: 2017/12/18 14:37:12 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ static t_list		**ft_lstalloc2(size_t size)
 		return (NULL);
 	if ((t = (t_list**)malloc(size * sizeof(t_list*))) == NULL)
 		return (NULL);
-	ft_lstpushback(t, " ");
+	ft_lstpushback(t, " ", 0);
 	while (i++ < (int)size)
-		ft_lstpushback(t, " ");
+		ft_lstpushback(t, " ", 0);
 	return (t);
 }
 

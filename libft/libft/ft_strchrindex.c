@@ -1,32 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstpushfront.c                                  :+:      :+:    :+:   */
+/*   ft_strchrindex.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/08 21:58:48 by fbabin            #+#    #+#             */
-/*   Updated: 2017/11/14 13:45:06 by fbabin           ###   ########.fr       */
+/*   Created: 2017/11/18 12:28:16 by fbabin            #+#    #+#             */
+/*   Updated: 2017/12/17 17:10:03 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void		ft_lstpushfront(t_list **begin_list, void *content)
+int		ft_strchrindex(const char *str, char c)
 {
-	t_list	*t;
+	int		i;
 
-	if (!begin_list)
-		return ;
-	if (*begin_list)
-	{
-		t = ft_lstcreate(content);
-		t->next = (*begin_list);
-		(*begin_list) = t;
-	}
-	else
-	{
-		t = ft_lstcreate(content);
-		(*begin_list) = t;
-	}
+	i = 0;
+	while (str[i] && str[i] != c)
+		i++;
+	return (i);
 }

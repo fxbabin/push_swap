@@ -1,30 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstpushback.c                                   :+:      :+:    :+:   */
+/*   ft_lstpushfront.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/08 21:58:25 by fbabin            #+#    #+#             */
-/*   Updated: 2017/11/14 13:18:24 by fbabin           ###   ########.fr       */
+/*   Created: 2017/11/08 21:58:48 by fbabin            #+#    #+#             */
+/*   Updated: 2017/12/18 14:36:06 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void		ft_lstpushback(t_list **begin_list, void *content)
+void		ft_lstpushfront(t_list **begin_list, void *content, size_t cs)
 {
-	t_list		*tmp;
+	t_list	*t;
 
 	if (!begin_list)
 		return ;
 	if (*begin_list)
 	{
-		tmp = *begin_list;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = ft_lstcreate(content);
+		t = ft_lstcreate(content, cs);
+		t->next = (*begin_list);
+		(*begin_list) = t;
 	}
 	else
-		*begin_list = ft_lstcreate(content);
+	{
+		t = ft_lstcreate(content, cs);
+		(*begin_list) = t;
+	}
 }
