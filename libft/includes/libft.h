@@ -6,7 +6,7 @@
 /*   By: fbabin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/08/15 16:16:51 by fbabin            #+#    #+#             */
-/*   Updated: 2017/12/19 15:38:22 by fbabin           ###   ########.fr       */
+/*   Updated: 2017/12/20 17:36:11 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,10 +100,15 @@ size_t				ft_strcspn(const char *s, const char *charset);
 */
 
 int					ft_atoi(const char *str);
+long				ft_atol(const char *str);
+long long			ft_atoll(const char *str);
+unsigned long long	ft_atollu(const char *str);
+char				*ft_itoa(int nb);
 char				*ft_ftoa(double nb, int prec);
 char				*ft_ltoa(long nb);
 char				*ft_lltoa(long long nb);
 char				*ft_llutoa(unsigned long long nb);
+char				*ft_itoa_base(int nb, const char *base);
 char				*ft_ltoa_base(long nb, const char *base);
 char				*ft_lltoa_base(long long nb, const char *base);
 char				*ft_llutoa_base(unsigned long long nb, const char *base);
@@ -133,8 +138,6 @@ void				ft_putchar_fd(char c, int fd);
 void				ft_putstr_fd(const char *s, int fd);
 void				ft_putendl_fd(const char *s, int fd);
 void				ft_putnbr_fd(int nb, int fd);
-char				*ft_itoa(int nb);
-char				*ft_itoa_base(int nb, const char *base);
 
 /*
 ** --------------------------- LIST FUNCTIONS --------------------------------

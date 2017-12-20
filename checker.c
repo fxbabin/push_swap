@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 13:44:39 by fbabin            #+#    #+#             */
-/*   Updated: 2017/12/16 17:18:16 by fbabin           ###   ########.fr       */
+/*   Updated: 2017/12/19 22:13:00 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,15 @@ int		**get_numbers(int argc, char **argv)
 
 int		main(int argc, char **argv)
 {
-	int		**stk;
+	int		i;
+
+	i = 0;
+	while (++i < argc)
+		ft_printf("%s\n", argv[i]);
+	/*int		**stk;
 
 	stk = get_numbers(argc, argv);
-	ft_int2dump(stk, argc - 2);
+	ft_int2dump(stk, argc - 2);*/
+
 	return (0);
 }
