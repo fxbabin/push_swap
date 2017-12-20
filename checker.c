@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 13:44:39 by fbabin            #+#    #+#             */
-/*   Updated: 2017/12/19 22:13:00 by fbabin           ###   ########.fr       */
+/*   Updated: 2017/12/20 23:29:10 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,57 +17,124 @@
 /*check numbers, pas de doublons*/
 /*stack functions*/
 
-typedef struct		s_stack
+void		ft_exit(int fd)
 {
-	t_list			*lst;
-	int				top;
-}					t_stack;
+	ft_fprintf(fd, "Error\n");
+	exit(fd);
+}
 
-/*int		check_numbers(int **tab);
-{
+/*typedef struct		s_stk
+  {
+  int				*stk;
+  int				top1;
+  int				top2;
+  }					t_stk;*/
 
-}*/
-
-int			ft_isstrdigit(char *str)
+void	ft_intdump(int *array, int size)
 {
 	int		i;
 
 	i = -1;
-	while (str[++i] && ft_isdigit(str[i]))
-		;
-	if (!str[i])
-		return (1);
-	return (0);
+	while (++i < size)
+	{
+		ft_putstr("[");
+		ft_putnbr(array[i]);
+		ft_putstr("] ");
+	}
+	ft_putstr("\n");
 }
 
-int		**get_numbers(int argc, char **argv)
+int		*ft_checknumbers(int argc, char **argv)
 {
-	int			**stk;
-	int			i;
+	int		*tab;
+	int		i;
+	int		nb;
 
 	i = 0;
-	stk = (int**)ft_memalloc2(argc, 1);
+	if (!(tab = (int*)ft_memalloc(argc)))
+		return (NULL);
 	while (++i < argc)
 	{
-		if (!ft_isstrdigit(argv[i]))
+		nb = (argv[i][0] == '-') ? 1 : 0;
+		if (!ft_strbspn(argv[i] + nb, "0123456789"))
 			return (NULL);
-		*stk[i - 1] = ft_atoi(argv[i]);
-		//ft_lstpushfront(&lst, argv[i]);
+		nb = ft_atoi(argv[i]);
+		if (nb != ft_atol(argv[i]))
+			return (NULL);
+		tab[i - 1] = nb;
 	}
-	return (stk);
+	return (tab);
+}
+
+void	*ft_memmdup(const void *s, size_t i)
+{
+	void	*str;
+
+	if (!s)
+		return (NULL);
+	if (!(str = malloc((i + 1))))
+		return (NULL);
+	ft_memcpy(str, s, i + 1);
+	return (str);
+}
+
+int		ft_checkdoubles(int *tab, int argc)
+{
+	int		*tmp;
+	int		i;
+
+	i = -1;
+	ft_intdump(tab, argc - 1);
+	tmp = ft_memmdup(tab, sizeof(int) * (argc - 1));
+	ft_intdump(tab, argc - 1);
+	ft_intdump(tmp, argc - 1);
+	ft_quicksort(tmp, 0, argc - 2);
+	ft_intdump(tmp, argc - 1);
+	while (++i < argc - 3)
+	{
+		if (tmp[i] == tmp[i + 1])
+		{
+			free(tmp);
+			return (0);
+		}
+	}
+	free(tmp);
+	return (1);
 }
 
 int		main(int argc, char **argv)
 {
-	int		i;
+	int		*stk;
 
-	i = 0;
-	while (++i < argc)
-		ft_printf("%s\n", argv[i]);
+	if (argc < 2)
+		ft_exit(2);
+	if (!(stk = ft_checknumbers(argc, argv)))
+		ft_exit(2);
+	ft_intdump(stk, argc - 1);
+	int		*tmp;
+
+	tmp = ft_memmdup(stk, sizeof(int) * (argc));
+	ft_intdump(stk, argc - 1);
+	ft_intdump(tmp, argc - 1);
+	//if (!ft_checkdoubles(stk, argc))
+	//	printf("ok\n");
+	//ft_quicksort(stk, 0, argc - 2);
+	//ft_intdump(ft_memdup(stk, sizeof(int) * (argc - 1)), argc - 1);
+	//ft_intdump(stk, argc - 1);
+	/*char	*line;
+	  get_next_line(0, &line);
+	  printf("%s\n", line);*/
+	//printf("%d\n", ft_strbspn(argv[1], "0123456789"));
+	//ft_checknumbers(argc, argv);
+	/*int		i;
+
+	  i = 0;
+	  while (++i < argc)
+	  ft_printf("%s\n", argv[i]);*/
 	/*int		**stk;
 
-	stk = get_numbers(argc, argv);
-	ft_int2dump(stk, argc - 2);*/
+	  stk = get_numbers(argc, argv);
+	  ft_int2dump(stk, argc - 2);*/
 
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: fbabin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/08/15 16:16:51 by fbabin            #+#    #+#             */
-/*   Updated: 2017/12/20 17:36:11 by fbabin           ###   ########.fr       */
+/*   Updated: 2017/12/20 23:06:00 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int					ft_memcmp(const void *s1, const void *s2, size_t n);
 void				*ft_memalloc(size_t size);
 void				ft_memdel(void **ap);
 void				**ft_memalloc2(size_t size, size_t len);
-void				*ft_memdup(const void *s);
+void				*ft_memdup(const void *s, size_t i);
 void				*ft_realloc(void *ptr, size_t size);
 
 /*
@@ -93,8 +93,11 @@ char				*ft_strjoinclr(char *s1, char *s2, int b);
 char				*ft_strnjoinclr(char *s1, char *s2, int len, int b);
 char				*ft_strreplace(char *str, const char *old,
 						const char *fresh);
-size_t				ft_strspn(const char *s, const char *charset);
-size_t				ft_strcspn(const char *s, const char *charset);
+int				ft_strspn(const char *s, const char *charset);
+int				ft_strcspn(const char *s, const char *charset);
+char			ft_strbspn(const char *s, const char *charset);
+char			ft_strbcspn(const char *s, const char *charset);
+
 /*
 ** --------------------------- CONVERSION FUNCTIONS ----------------------------
 */
@@ -119,7 +122,8 @@ char				*ft_llutoa_base(unsigned long long nb, const char *base);
 
 char				**ft_split(char *str, char *charset);
 char				*ft_join(char **tab, char *sep);
-void				ft_quicksort(int **array, int left, int right);
+void				ft_quicksort(int *array, int left, int right);
+void				ft_quicksort2(int **array, int left, int right);
 void				ft_strquicksort(char **array, int left, int right);
 void				ft_mergesort(int **array, int left, int right);
 void				ft_strmergesort(char **array, int left, int right);
