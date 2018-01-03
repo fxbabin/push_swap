@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 13:44:39 by fbabin            #+#    #+#             */
-/*   Updated: 2017/12/20 23:29:10 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/03 23:00:35 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,40 +19,27 @@
 
 void		ft_exit(int fd)
 {
-	ft_fprintf(fd, "Error\n");
+	ft_fprintf(2, "Error\n");
 	exit(fd);
 }
 
-/*typedef struct		s_stk
-  {
-  int				*stk;
-  int				top1;
-  int				top2;
-  }					t_stk;*/
-
-void	ft_intdump(int *array, int size)
+int		ft_error(int nb)
 {
-	int		i;
-
-	i = -1;
-	while (++i < size)
-	{
-		ft_putstr("[");
-		ft_putnbr(array[i]);
-		ft_putstr("] ");
-	}
-	ft_putstr("\n");
+	ft_fprintf(2, "Error\n");
+	return (nb);
 }
 
-int		*ft_checknumbers(int argc, char **argv)
+int		**ft_checknumbers(int argc, char **argv)
 {
-	int		*tab;
+	int		**tab;
 	int		i;
 	int		nb;
 
 	i = 0;
-	if (!(tab = (int*)ft_memalloc(argc)))
+	tab = NULL;
+	if (!(tab = (int**)ft_memalloc2(argc - 1, 1)))
 		return (NULL);
+	tab[argc - 1] = NULL;
 	while (++i < argc)
 	{
 		nb = (argv[i][0] == '-') ? 1 : 0;
@@ -61,80 +48,125 @@ int		*ft_checknumbers(int argc, char **argv)
 		nb = ft_atoi(argv[i]);
 		if (nb != ft_atol(argv[i]))
 			return (NULL);
-		tab[i - 1] = nb;
+		*tab[i - 1] = nb;
 	}
 	return (tab);
 }
 
-void	*ft_memmdup(const void *s, size_t i)
+int		ft_checkdoubles(int **tab, int argc)
 {
-	void	*str;
-
-	if (!s)
-		return (NULL);
-	if (!(str = malloc((i + 1))))
-		return (NULL);
-	ft_memcpy(str, s, i + 1);
-	return (str);
-}
-
-int		ft_checkdoubles(int *tab, int argc)
-{
-	int		*tmp;
 	int		i;
+	int		y;
 
 	i = -1;
-	ft_intdump(tab, argc - 1);
-	tmp = ft_memmdup(tab, sizeof(int) * (argc - 1));
-	ft_intdump(tab, argc - 1);
-	ft_intdump(tmp, argc - 1);
-	ft_quicksort(tmp, 0, argc - 2);
-	ft_intdump(tmp, argc - 1);
-	while (++i < argc - 3)
+	while (++i < argc - 2) 
 	{
-		if (tmp[i] == tmp[i + 1])
+		y = i;
+		while (++y < argc - 1)
 		{
-			free(tmp);
-			return (0);
+			if (*tab[i] == *tab[y])
+				return (0);
 		}
 	}
-	free(tmp);
 	return (1);
+}
+
+void	ft_dispstk(int **tab, int top1, int top2)
+{
+	int		i;
+
+	i = 0;
+	ft_putstr("stack_1 :");
+	while (i <= top1)
+		ft_printf(" [%d]", *tab[i++]);
+	ft_printf("\nstack_2 :");
+	i = top1;
+	while (++i <= top2)
+		ft_printf(" [%d]", *tab[i]);
+	ft_printf("\n");
+}
+
+void	rotate(int **tab, int top1, int top2, int b)
+{
+	int		tmp;
+
+	if (b == 1 && top1 > 0)
+	{
+		ft_swap(tab[0], tab[top1]);
+		tmp = -1;
+		if (top1 > 1)
+			while (++tmp < top1 - 1)
+				ft_swap(tab[tmp], tab[tmp + 1]);
+	}
+	if (b == 2 && top2 > 0 && (top1 + 1) <= top2)
+	{
+		ft_swap(tab[top1 + 1], tab[top2]);
+		tmp = top1;
+		if ((top2 - top1) > 1)
+			while (++tmp < top2 - 1)
+				ft_swap(tab[tmp], tab[tmp + 1]);
+	}
+}
+
+void	push(int **tab, int *top1, int top2, int b)
+{
+	int		tmp;
+
+	if (b == 1 && *top1 >= 0)
+	{
+		rotate(tab, *top1, top2, 1);
+		*top1 -= 1;
+	}
+	if (b == 2 && *top1 + 1 <= top2)
+	{
+		*top1 += 1;
+		if (*top1 < top2 - 1)
+			rotate(tab, *top1, top2, 1);
+	}
 }
 
 int		main(int argc, char **argv)
 {
-	int		*stk;
+	int			**tab;
+	int			top1;
+	int			top2;
 
+	top1 = argc - 2;
+	top2 = argc - 2;
 	if (argc < 2)
-		ft_exit(2);
-	if (!(stk = ft_checknumbers(argc, argv)))
-		ft_exit(2);
-	ft_intdump(stk, argc - 1);
-	int		*tmp;
+		return (ft_error(-1));
+	if (!(tab = ft_checknumbers(argc, argv)))
+		return (ft_error(-1));
+	if (!(ft_checkdoubles(tab, argc)))
+		return (ft_error(-1));
+	//ft_int2dump(tab, argc - 2);
+	ft_dispstk(tab, top1, top2);
+	//ft_swap(tab[0], tab[1]);
+	rotate(tab, top1, top2, 1);
+	ft_dispstk(tab, top1, top2);
+	rotate(tab, top1, top2, 1); 
+	ft_dispstk(tab, top1, top2);
+	rotate(tab, top1, top2, 1); 
+	ft_dispstk(tab, top1, top2);
+	rotate(tab, top1, top2, 1); 
+	ft_dispstk(tab, top1, top2);
+	push(tab, &top1, top2, 1); 
+	ft_dispstk(tab, top1, top2);
+	push(tab, &top1, top2, 1); 
+	ft_dispstk(tab, top1, top2);
+	push(tab, &top1, top2, 1); 
+	ft_dispstk(tab, top1, top2);
+	printf("%d %d\n", top1, top2);
+	/*rotate(tab, top1, top2, 2); 
+	ft_dispstk(tab, top1, top2);*/
+	push(tab, &top1, top2, 2); 
+	ft_dispstk(tab, top1, top2);
+	push(tab, &top1, top2, 2); 
+	ft_dispstk(tab, top1, top2);
+	push(tab, &top1, top2, 2); 
+	ft_dispstk(tab, top1, top2);
 
-	tmp = ft_memmdup(stk, sizeof(int) * (argc));
-	ft_intdump(stk, argc - 1);
-	ft_intdump(tmp, argc - 1);
-	//if (!ft_checkdoubles(stk, argc))
-	//	printf("ok\n");
-	//ft_quicksort(stk, 0, argc - 2);
-	//ft_intdump(ft_memdup(stk, sizeof(int) * (argc - 1)), argc - 1);
-	//ft_intdump(stk, argc - 1);
-	/*char	*line;
-	  get_next_line(0, &line);
-	  printf("%s\n", line);*/
-	//printf("%d\n", ft_strbspn(argv[1], "0123456789"));
-	//ft_checknumbers(argc, argv);
-	/*int		i;
-
-	  i = 0;
-	  while (++i < argc)
-	  ft_printf("%s\n", argv[i]);*/
-	/*int		**stk;
-
-	  stk = get_numbers(argc, argv);
-	  ft_int2dump(stk, argc - 2);*/
-
+	//ft_int2dump(tab, argc - 2);
+	//ft_int2dump(tab, argc - 2);
 	return (0);
 }

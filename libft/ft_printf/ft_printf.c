@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/20 15:25:39 by fbabin            #+#    #+#             */
-/*   Updated: 2017/12/15 20:51:16 by fbabin           ###   ########.fr       */
+/*   Updated: 2017/12/21 16:14:06 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int				ft_vfprintf(int fd, const char *format, va_list ap)
 	len = 0;
 	if (!(str = ft_readf(format, ap, buff, &len)))
 	{
-		if (len != -1)
+		if (len == -1)
 			free(buff);
 		return (-1);
 	}
