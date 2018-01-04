@@ -6,22 +6,11 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 13:44:39 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/03 23:00:35 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/04 20:33:25 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-#include <stdio.h>
-
-/*check instructions*/
-/*check numbers, pas de doublons*/
-/*stack functions*/
-
-void		ft_exit(int fd)
-{
-	ft_fprintf(2, "Error\n");
-	exit(fd);
-}
 
 int		ft_error(int nb)
 {
@@ -86,11 +75,11 @@ void	ft_dispstk(int **tab, int top1, int top2)
 	ft_printf("\n");
 }
 
-void	rotate(int **tab, int top1, int top2, int b)
+void	rotate_t(int **tab, int top1, int top2, int b)
 {
 	int		tmp;
 
-	if (b == 1 && top1 > 0)
+	if ((b == 0 || b == 1) && top1 > 0)
 	{
 		ft_swap(tab[0], tab[top1]);
 		tmp = -1;
@@ -98,7 +87,7 @@ void	rotate(int **tab, int top1, int top2, int b)
 			while (++tmp < top1 - 1)
 				ft_swap(tab[tmp], tab[tmp + 1]);
 	}
-	if (b == 2 && top2 > 0 && (top1 + 1) <= top2)
+	if ((b == 0 || b == 2) && top2 > 0 && (top1 + 1) <= top2)
 	{
 		ft_swap(tab[top1 + 1], tab[top2]);
 		tmp = top1;
@@ -108,21 +97,111 @@ void	rotate(int **tab, int top1, int top2, int b)
 	}
 }
 
+void	rotate_b(int **tab, int top1, int top2, int b)
+{
+	int		tmp;
+
+	if ((b == 0 || b == 1) && top1 > 0)
+	{
+		ft_swap(tab[0], tab[top1]);
+		tmp = top1;
+		if (top1 > 1)
+			while (--tmp >= 1)
+				ft_swap(tab[tmp], tab[tmp + 1]);
+	}
+	if ((b == 0 || b == 2) && top2 > 0 && (top1 + 1) < top2)
+	{
+		ft_swap(tab[top1 + 1], tab[top2]);
+		tmp = top2;
+		if ((top2 - top1) > 1)
+			while (--tmp > top1 + 1)
+				ft_swap(tab[tmp], tab[tmp + 1]);
+	}
+}
+
 void	push(int **tab, int *top1, int top2, int b)
 {
 	int		tmp;
 
-	if (b == 1 && *top1 >= 0)
+	if ((b == 0 || b == 1) && *top1 >= 0)
 	{
-		rotate(tab, *top1, top2, 1);
+		rotate_t(tab, *top1, top2, 1);
 		*top1 -= 1;
 	}
-	if (b == 2 && *top1 + 1 <= top2)
+	if ((b == 0 || b == 2) && *top1 + 1 <= top2)
 	{
 		*top1 += 1;
-		if (*top1 < top2 - 1)
-			rotate(tab, *top1, top2, 1);
+		rotate_b(tab, *top1, top2, 1);
 	}
+}
+
+int		ft_checkinr(char *line, int **tab, int *top1, int top2)
+{
+	int		slen;
+
+	slen = ft_strlen(line);
+	if (slen == 2)
+	{
+		if ((line[1] == 'a' || line[1] == 'r') && *top1 > 0)
+			rotate_t(tab, *top1, top2, 1);
+		if ((line[1] == 'b' || line[1] == 'r') && *top1 < top2)
+			rotate_t(tab, *top1, top2, 2);
+	}
+	else if (slen == 3 && line[1] == 'r')
+	{
+		if ((line[2] == 'a' || line[2] == 'r') && *top1 > 0)
+			rotate_b(tab, *top1, top2, 1);
+		if ((line[2] == 'b' || line[2] == 'r') && *top1 < top2)
+			rotate_b(tab, *top1, top2, 2);
+	}
+	else
+		return (0);
+	return (1);
+}
+
+int		ft_checkins(char *line, int **tab, int *top1, int top2)
+{
+	int		slen;
+
+	slen = ft_strlen(line);
+	if (slen > 3 || !ft_strbspn(line, "sabrp"))
+		return (0);
+	if (line[0] == 's' && slen == 2)
+	{
+		if ((line[1] == 'a' || line[1] == 's') && *top1 > 0)
+			ft_swap(tab[0], tab[1]);
+		if ((line[1] == 'b' || line[1] == 's') && *top1 < top2)
+			ft_swap(tab[*top1 + 1], tab[top2]);
+	}
+	else if (line[0] == 'p' && slen == 2)
+	{
+		if (line[1] == 'a' && *top1 < top2)
+			push(tab, top1, top2, 2);
+		if (line[1] == 'b' && *top1 >= 0)
+			push(tab, top1, top2, 1);
+	}
+	else if (line[0] == 'r' && ft_checkinr(line, tab, top1, top2))
+		;
+	else
+		return (0);
+	return (1);
+}
+
+int		is_sorted(int **tab, int top1, int top2)
+{
+	int		i;
+
+	i = 0;
+	if (top1 < top2)
+		return (0);
+	if (top2 == 0)
+		return (1);
+	while (++i <= top2)
+	{
+		if (*tab[i - 1] >= *tab[i])
+			return (0);
+	}
+	return (1);
 }
 
 int		main(int argc, char **argv)
@@ -130,6 +209,7 @@ int		main(int argc, char **argv)
 	int			**tab;
 	int			top1;
 	int			top2;
+	char		*line;
 
 	top1 = argc - 2;
 	top2 = argc - 2;
@@ -139,34 +219,14 @@ int		main(int argc, char **argv)
 		return (ft_error(-1));
 	if (!(ft_checkdoubles(tab, argc)))
 		return (ft_error(-1));
-	//ft_int2dump(tab, argc - 2);
-	ft_dispstk(tab, top1, top2);
-	//ft_swap(tab[0], tab[1]);
-	rotate(tab, top1, top2, 1);
-	ft_dispstk(tab, top1, top2);
-	rotate(tab, top1, top2, 1); 
-	ft_dispstk(tab, top1, top2);
-	rotate(tab, top1, top2, 1); 
-	ft_dispstk(tab, top1, top2);
-	rotate(tab, top1, top2, 1); 
-	ft_dispstk(tab, top1, top2);
-	push(tab, &top1, top2, 1); 
-	ft_dispstk(tab, top1, top2);
-	push(tab, &top1, top2, 1); 
-	ft_dispstk(tab, top1, top2);
-	push(tab, &top1, top2, 1); 
-	ft_dispstk(tab, top1, top2);
-	printf("%d %d\n", top1, top2);
-	/*rotate(tab, top1, top2, 2); 
-	ft_dispstk(tab, top1, top2);*/
-	push(tab, &top1, top2, 2); 
-	ft_dispstk(tab, top1, top2);
-	push(tab, &top1, top2, 2); 
-	ft_dispstk(tab, top1, top2);
-	push(tab, &top1, top2, 2); 
-	ft_dispstk(tab, top1, top2);
-
-	//ft_int2dump(tab, argc - 2);
-	//ft_int2dump(tab, argc - 2);
+	while (get_next_line(0, &line) > 0)
+	{
+		if (!ft_checkins(line, tab, &top1, top2))
+			return (ft_error(-1));
+	}
+	if (is_sorted(tab, top1, top2))
+		ft_printf("OK\n");
+	else
+		ft_printf("KO\n");
 	return (0);
 }
