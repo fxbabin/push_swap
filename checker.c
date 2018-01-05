@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 13:44:39 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/04 20:33:25 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/05 17:36:29 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int		ft_checkdoubles(int **tab, int argc)
 	int		y;
 
 	i = -1;
-	while (++i < argc - 2) 
+	while (++i < argc - 2)
 	{
 		y = i;
 		while (++y < argc - 1)
@@ -162,29 +162,30 @@ int		ft_checkinr(char *line, int **tab, int *top1, int top2)
 int		ft_checkins(char *line, int **tab, int *top1, int top2)
 {
 	int		slen;
+	int		b;
 
+	b = 1;
 	slen = ft_strlen(line);
 	if (slen > 3 || !ft_strbspn(line, "sabrp"))
-		return (0);
-	if (line[0] == 's' && slen == 2)
+		b = 0;
+	if (b && line[0] == 's' && slen == 2)
 	{
 		if ((line[1] == 'a' || line[1] == 's') && *top1 > 0)
 			ft_swap(tab[0], tab[1]);
 		if ((line[1] == 'b' || line[1] == 's') && *top1 < top2)
 			ft_swap(tab[*top1 + 1], tab[top2]);
 	}
-	else if (line[0] == 'p' && slen == 2)
+	else if (b && line[0] == 'p' && slen == 2)
 	{
-		if (line[1] == 'a' && *top1 < top2)
-			push(tab, top1, top2, 2);
-		if (line[1] == 'b' && *top1 >= 0)
-			push(tab, top1, top2, 1);
+		(line[1] == 'a' && *top1 < top2) ? push(tab, top1, top2, 2) : NULL;
+		(line[1] == 'b' && *top1 >= 0) ? push(tab, top1, top2, 1) : NULL;
 	}
 	else if (line[0] == 'r' && ft_checkinr(line, tab, top1, top2))
 		;
 	else
-		return (0);
-	return (1);
+		b = 0;
+	free(line);
+	return (b);
 }
 
 int		is_sorted(int **tab, int top1, int top2)
@@ -204,6 +205,56 @@ int		is_sorted(int **tab, int top1, int top2)
 	return (1);
 }
 
+static int		ft_wordnb(char *str, char *charset)
+{
+	int	w;
+	int	i;
+
+	w = 0;
+	i = -1;
+	while (str[++i])
+		if ((ft_charinset(str[i], charset) == 0) &&
+			((ft_charinset(str[i + 1], charset) == 1) || str[i + 1] == '\0'))
+			w++;
+	return (w);
+}
+
+int		tabsize(char **tab)
+{
+	int		i;
+
+	i = -1;
+	while (tab[++i])
+		;
+	return (i);
+}
+
+void	free2(void **tab, int size)
+{
+	int		i;
+
+	i = size;
+	while (i >= 0)
+		free(tab[i--]);
+	free(tab);
+}
+
+char	**modif_argv(int argc, char **argv)
+{
+	char	*tmp;
+
+	tmp = NULL;
+	if (argc == 2 && ft_wordnb(argv[1], " ") > 1)
+		argc = -1;
+	if (argc == -1)
+		tmp = ft_strjoinclr("x ", argv[1], 3);
+	if (argc == -1)
+		argv = ft_strsplit(tmp, ' ');
+	if (tmp)
+		free(tmp);
+	return (argv);
+}
+
 int		main(int argc, char **argv)
 {
 	int			**tab;
@@ -211,22 +262,24 @@ int		main(int argc, char **argv)
 	int			top2;
 	char		*line;
 
-	top1 = argc - 2;
-	top2 = argc - 2;
+	line = NULL;
 	if (argc < 2)
 		return (ft_error(-1));
+	argv = modif_argv(argc, argv);
+	argc = (argc != tabsize(argv)) ? tabsize(argv) : argc;
+	top1 = argc - 2;
+	top2 = argc - 2;
 	if (!(tab = ft_checknumbers(argc, argv)))
 		return (ft_error(-1));
 	if (!(ft_checkdoubles(tab, argc)))
 		return (ft_error(-1));
 	while (get_next_line(0, &line) > 0)
-	{
 		if (!ft_checkins(line, tab, &top1, top2))
 			return (ft_error(-1));
-	}
-	if (is_sorted(tab, top1, top2))
-		ft_printf("OK\n");
-	else
-		ft_printf("KO\n");
+	free(line);
+	if (argv[0][0] == 'x')
+		free2((void**)argv, tabsize(argv));
+	(is_sorted(tab, top1, top2)) ? ft_printf("OK\n") : ft_printf("KO\n");
+	free2((void**)tab, top2);
 	return (0);
 }
