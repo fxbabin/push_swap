@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 13:44:39 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/05 22:18:36 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/06 17:19:40 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ int		main(int argc, char **argv)
 	line = NULL;
 	if (argc < 2)
 		return (ft_error(-1));
-	argv = modif_argv(argc, argv);
+	argv = modif_argv(argc, argv, -1);
 	argc = (argc != tabsize(argv)) ? tabsize(argv) : argc;
 	top1 = argc - 2;
 	top2 = argc - 2;
-	if (!(tab = ft_checknumbers(argc, argv)))
+	if (!(tab = ft_checknumbers(argc, argv, -1)))
 		return (ft_error(-1));
 	if (!(ft_checkdoubles(tab, argc)))
 		return (ft_error(-1));

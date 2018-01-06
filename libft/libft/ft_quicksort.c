@@ -6,26 +6,26 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 22:15:35 by fbabin            #+#    #+#             */
-/*   Updated: 2017/12/20 22:41:01 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/06 22:13:21 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int		ft_partition(int *array, int left, int right)
+static int		ft_partition(int **array, int left, int right)
 {
 	int		pivot;
 
-	pivot = array[(left + right) / 2];
+	pivot = *array[(left + right) / 2];
 	while (left <= right)
 	{
-		while (array[left] < pivot)
+		while (*array[left] < pivot)
 			left++;
-		while (array[right] > pivot)
+		while (*array[right] > pivot)
 			right--;
 		if (left <= right)
 		{
-			ft_swap(&(array[left]), &(array[right]));
+			ft_swap(array[left], array[right]);
 			left++;
 			right--;
 		}
@@ -33,7 +33,7 @@ static int		ft_partition(int *array, int left, int right)
 	return (left);
 }
 
-void			ft_quicksort(int *array, int left, int right)
+void			ft_quicksort(int **array, int left, int right)
 {
 	int		index;
 

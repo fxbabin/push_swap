@@ -6,23 +6,25 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 22:09:03 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/05 22:11:41 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/06 15:19:32 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int			**ft_checknumbers(int argc, char **argv)
+int			**ft_checknumbers(int argc, char **argv, int opt)
 {
 	int		**tab;
 	int		i;
 	int		nb;
+	int		b;
 
-	i = 0;
 	tab = NULL;
-	if (!(tab = (int**)ft_memalloc2(argc - 1, 1)))
+	b = (opt > -1 && **argv != 'x') ? 2 : 1;
+	if (!(tab = (int**)ft_memalloc2(argc - b, 1)))
 		return (NULL);
-	tab[argc - 1] = NULL;
+	tab[argc - b] = NULL;
+	i = b - 1;
 	while (++i < argc)
 	{
 		nb = (argv[i][0] == '-') ? 1 : 0;
@@ -31,7 +33,7 @@ int			**ft_checknumbers(int argc, char **argv)
 		nb = ft_atoi(argv[i]);
 		if (nb != ft_atol(argv[i]))
 			return (NULL);
-		*tab[i - 1] = nb;
+		*tab[i - b] = nb;
 	}
 	return (tab);
 }
