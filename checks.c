@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 22:09:03 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/06 15:19:32 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/07 12:10:37 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,16 @@ int			**ft_checknumbers(int argc, char **argv, int opt)
 	return (tab);
 }
 
-int			ft_checkdoubles(int **tab, int argc)
+int			ft_checkdoubles(int **tab, int top2)
 {
 	int		i;
 	int		y;
 
 	i = -1;
-	while (++i < argc - 2)
+	while (++i <= top2 - 1)
 	{
 		y = i;
-		while (++y < argc - 1)
+		while (++y <= top2)
 		{
 			if (*tab[i] == *tab[y])
 				return (0);

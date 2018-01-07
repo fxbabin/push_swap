@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 20:54:52 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/06 23:02:21 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/07 21:54:31 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void		handler(int **tab, t_top *t, const char *s, int opt)
 	}
 	if (s[0] == 'p')
 	{
-		(s[1] == 'a') ? push(tab, &(t->top1), t->top2, 1) : 0;
-		(s[1] == 'b') ? push(tab, &(t->top1), t->top2, 2) : 0;
+		(s[1] == 'a') ? push(tab, &(t->top1), t->top2, 2) : 0;
+		(s[1] == 'b') ? push(tab, &(t->top1), t->top2, 1) : 0;
 	}
 	if (s[0] == 'r' && ft_strlen(s) == 2)
 	{
@@ -57,19 +57,21 @@ int		small_sort(int **tab, t_top *t, int opt)
 
 	i = 0;
 	max = 0;
-	while (++i <= t->top2)
+	if (t->top2 == 0)
+		return (0);
+	while (++i <= t->top1)
 		if (*tab[i] > *tab[max])
 			max = i;
-	if (max == 0)
+	if (max == 0 && t->top1 == 2)
 		handler(tab, t, "ra", opt); 
-	else if (max == 1)
+	else if (max == 1 && t->top1 == 2)
 		handler(tab, t, "rra", opt); 
 	if (*tab[0] > *tab[1])
 		handler(tab, t, "sa", opt); 
 	return (0);
 }
 
-/*int		**cpytab(int **tab, int size)
+int		**cpytab(int **tab, int size)
 {
 	int		**new;
 	int		i;
@@ -82,7 +84,7 @@ int		small_sort(int **tab, t_top *t, int opt)
 	while (++i <= size)
 		*new[i] = *tab[i];
 	return (new);
-}*/
+}
 
 /*void	medium_sort(int **tab, t_top *t, int opt)
 {
@@ -107,6 +109,7 @@ int		small_sort(int **tab, t_top *t, int opt)
 	ft_int2dump(stab, t->top2);
 	free2((void**)stab, t->top2 - 1);
 }*/
+
 
 int		get_mincost(int **tab, t_top *t)
 {
@@ -152,11 +155,156 @@ int		getopts(const char *opt)
 	return (i);
 }
 
+int		getmedian(int **tab, int top)
+{
+	int		**stab;
+	int		med;
+
+	stab = cpytab(tab, top);
+	ft_quicksort(stab, 0, top);
+	//ft_int2dump(stab, t->top2);
+	//ft_printf("%d\n", *stab[t->top2 / 2]);
+	med = *stab[top / 2];
+	free2((void**)stab, top - 1);
+	return (med);
+}
+
+int		get_pushcost(int idx, t_top *t)
+{
+	int		i;
+	int		med;
+
+	med = t->top1 / 2;
+	i =  med;
+	if (idx < med)
+		i = idx;
+	else if (idx > med)
+		i = (t->top1 + 1) - idx;
+	return (i);
+}
+
+/*int		getmin(int **tab, t_top *t, int med)
+{
+	int		min;
+	int		midx;
+	int		i;
+
+	i = -1;
+	min = t->top1;
+	midx = min;
+	//ft_printf("%d\n", med);
+	while (++i <= t->top1)
+	{
+		if (*tab[i] < med)
+		{
+			//ft_printf("%d %d\n", *tab[i], i);
+			if (get_pushcost(i, t) < min)
+			{	
+				//ft_printf("min %d\n", min);
+				min = get_pushcost(i, t);
+				midx = i;
+				//ft_printf("min %d idx %d\n", min, i);
+			}
+		}
+	}
+	//ft_printf("midx %d min %d\n", midx, min);
+	return (midx);
+}*/
+
+void	swap2b(int **tab, t_top *t, int idx, int opt)
+{
+
+	//(void)t;
+	/*if (idx == 0)
+		ft_printf("prev %d\n", *tab[t->top1]);
+	else
+		ft_printf("prev %d\n", *tab[idx - 1]);
+	ft_printf("curr %d\n", *tab[idx]);
+	if (idx == t->top1)
+		ft_printf("next %d\n", *tab[0]);
+	else
+		ft_printf("next %d\n", *tab[idx + 1]);*/
+
+	while (idx > 0)
+	{
+		if (idx <= t->top1 / 2)
+		{
+			handler(tab, t, "ra", opt);
+			idx = (idx == t->top1) ? 0 : idx + 1;
+		}
+		if (idx <= t->top1 / 2)
+		{
+			handler(tab, t, "rra", opt);
+			idx--;
+		}
+	}
+}
+
+int		get_min(int **tab, t_top *t)
+{
+	int		midx;
+	int		min;
+	int		i;
+
+	i = 0;
+	min = *tab[0];
+	while (++i <= t->top1)
+	{
+		if (*tab[i] < min)
+		{
+			min = *tab[i];
+			midx = i;
+		}
+	}
+	return (midx);
+}
+
+void	move_min(int **tab, t_top *t, int min, int opt)
+{
+	if (min == 1 && *tab[0] > *tab[1])
+		handler(tab, t, "sa", opt);
+	else if (min > 1)
+	{
+		if (min <= t->top1 / 2)
+		{
+			while (min--)
+				handler(tab, t, "ra", opt);
+		}
+		else if (min > t->top1 / 2)
+		{
+			while (min <= t->top1 && min++)
+				handler(tab, t, "rra", opt);
+		}
+	}
+}
+
+void	ft_selection_sort(int **tab, t_top *t, int opt)
+{
+	int		min;
+	//int		mid;
+
+	//mid = t->top1 / 2;
+	//ft_printf("%d\n", mid);
+	while (t->top1 > 0)
+	{
+		min = get_min(tab, t);
+		move_min(tab, t, min, opt);
+		if (is_sorted(tab, t->top1, t->top2))
+			break ;
+		handler(tab, t, "pb", opt); 
+	}
+	//if (mid <= 2)
+	//	small_sort(tab, t, opt);
+	while (t->top1 < t->top2)
+		handler(tab, t, "pa", opt); 
+}
+
 int		inner_main(int argc, char **argv, int opt)
 {
 	int			**tab;
 	t_top		t;
 	char		*line;
+	//int			med;
 
 	(void)opt;
 	line = NULL;
@@ -166,8 +314,35 @@ int		inner_main(int argc, char **argv, int opt)
 	t.top2 = t.top1;
 	if (!(ft_checkdoubles(tab, t.top2)))
 		return (ft_error(-1));
-	ft_printf("%d\n", get_mincost(tab, &t));
-	//small_sort(tab, &t, opt);
+	//med = getmedian(tab, t.top1);
+	if (t.top2 <= 2)
+		small_sort(tab, &t, opt);
+	else if (t.top2 <= 100)
+		ft_selection_sort(tab, &t, opt);
+	//ft_printf("%d %d\n", med, getmin(tab, &t, med));
+	//ft_dispstk(tab, t.top1, t.top2);
+	//ft_printf("%d\n", get_min(tab, &t));
+	//move_min(tab, &t, get_min(tab, &t), opt);
+	//ft_dispstk(tab, t.top1, t.top2);
+	
+	//swap2b(tab, &t, 2, opt);
+	//get
+	//getmedian(tab, &t);
+	//prot(tab, &t, opt);
+	/*ft_dispstk(tab, t.top1, t.top2);
+	prot(tab, &t, opt);
+	handler(tab, &t, "pb", opt);
+	ft_dispstk(tab, t.top1, t.top2);
+	prot(tab, &t, opt);
+	handler(tab, &t, "pb", opt); 
+	ft_dispstk(tab, t.top1, t.top2);
+	prot(tab, &t, opt);
+	handler(tab, &t, "pb", opt);
+	ft_dispstk(tab, t.top1, t.top2);*/
+	//prot(tab, &t, opt);
+	//handler(
+	//ft_printf("%d\n", get_mincost(tab, &t));
+	//
 	//medium_sort(tab, &t, opt);
 	if (**argv == 'x')
 		free2((void**)argv, tabsize(argv));
