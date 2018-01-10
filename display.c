@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 22:16:38 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/06 17:05:16 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/10 15:34:45 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static void		ft_coldisp(const char *s)
 	ft_coldisp2(s);
 }
 
-int		ft_disp(int **tab, t_top *t, const char *s, int opt)
+int				ft_disp(int **tab, t_ps *t, const char *s, int opt)
 {
 	if (opt == 1 || opt == 0)
 		ft_coldisp(s);
@@ -79,4 +79,30 @@ int		ft_disp(int **tab, t_top *t, const char *s, int opt)
 	if (opt == 2 || opt == 0)
 		ft_dispstk(tab, t->top1, t->top2);
 	return (1);
+}
+
+void			handler(int **tab, t_ps *t, const char *s, int opt)
+{
+	if (s[0] == 's')
+	{
+		(s[1] == 'a' || s[1] == 's') ? ft_swap(tab[0], tab[1]) : 0;
+		if (s[1] == 'b' || s[1] == 's')
+			ft_swap(tab[t->top1 + 1], tab[t->top1 + 2]);
+	}
+	if (s[0] == 'p')
+	{
+		(s[1] == 'a') ? push(tab, &(t->top1), t->top2, 2) : 0;
+		(s[1] == 'b') ? push(tab, &(t->top1), t->top2, 1) : 0;
+	}
+	if (s[0] == 'r' && ft_strlen(s) == 2)
+	{
+		(s[1] == 'a' || s[1] == 'r') ? rotate_t(tab, t->top1, t->top2, 1) : 0;
+		(s[1] == 'b' || s[1] == 'r') ? rotate_t(tab, t->top1, t->top2, 2) : 0;
+	}
+	else if (s[0] == 'r' && s[1] == 'r' && ft_strlen(s) == 3)
+	{
+		(s[2] == 'a' || s[2] == 'r') ? rotate_b(tab, t->top1, t->top2, 1) : 0;
+		(s[2] == 'b' || s[2] == 'r') ? rotate_b(tab, t->top1, t->top2, 2) : 0;
+	}
+	ft_disp(tab, t, s, opt);
 }

@@ -6,7 +6,7 @@
 #    By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/05 22:43:45 by fbabin            #+#    #+#              #
-#    Updated: 2018/01/05 23:31:56 by fbabin           ###   ########.fr        #
+#    Updated: 2018/01/10 21:00:17 by fbabin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,8 @@ PUSH_SWAP		= push_swap
 CC				= gcc
 CFLAGS			= -Wall -Werror -Wextra
 
-_SRCS			=	checks.c display.c operations.c utils.c \
+_SRCS			=	checks.c display.c operations.c utils.c utils_2.c gets.c \
+					small_sort.c \
 
 _PS_SRCS		=	push_swap.c
 _PS_SRCS		+=	$(_SRCS)
@@ -57,11 +58,11 @@ $(LIBFT):
 clean:
 		@make fclean -C $(LIB_DIR)
 		@/bin/rm -f $(C_OBJS) $(PS_OBJS)
-		@echo "clean : $(_GREEN)Done$(_END)"
+		@echo "push_swap clean : $(_GREEN)Done$(_END)"
 
 fclean: clean
 		@/bin/rm -f $(CHECKER) $(PUSH_SWAP)
-		@echo "fclean : $(_GREEN)Done$(_END)"
+		@echo "push_swap fclean : $(_GREEN)Done$(_END)"
 
 re:
 		@make fclean
