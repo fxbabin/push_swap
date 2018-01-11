@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/10 13:45:26 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/10 20:56:36 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/11 17:18:49 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ void	ft_selection_sort(int **tab, t_ps *t, t_list **steps)
 	}
 	if (tmp == 2)
 		small_sort(tab, t, steps);
-	while (tmp++ < t->top2)
-		ft_lstpushback(steps, "pa", 2);
+	//while (tmp++ < t->top2)
+	//	ft_lstpushback(steps, "pa", 2);
 }
 
 int		is_relsorted(int **tab, int start, int end)
