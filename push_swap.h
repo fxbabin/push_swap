@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 13:52:45 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/11 13:55:59 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/12 22:59:57 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,11 @@ typedef struct		s_ps
 typedef struct		s_op
 {
 	int				ra;
-	int				rra;
 	int				rb;
+	int				rr;
+	int				rra;
 	int				rrb;
+	int				rrr;
 }					t_op;
 
 /*
@@ -51,9 +53,9 @@ typedef struct		s_op
 */
 
 int				small_sort(int **tab, t_ps *t, t_list **steps);
-void			ft_selection_sort(int **tab, t_ps *t, t_list **steps);
+void			ft_selection_sort(int **tab, t_ps *t, int len, t_list **steps);
 
-void			move_elem(t_ps *t, int idx, t_list **steps);
+void			move_elem(int **tab, t_ps *t, int idx, t_list **steps);
 int				is_relsorted(int **tab, int start, int end);
 int				is_relrsorted(int **tab, int start, int end);
 

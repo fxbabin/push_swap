@@ -6,81 +6,126 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 20:54:52 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/11 23:01:01 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/13 13:20:55 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-/*int		getinsertidx(int **tab, int start, int end, int elem)
-  {
-  int		i;
-  int		max;
-
-  i = start;
-  max = get_max(tab, start, end);
-//ft_printf("%d\n", max);
-if (elem > *tab[max])
-return (max);
-else if (elem == 0 && elem > *tab[start] && elem < *tab[end])
-return (0);
-else
+void	init_op(t_op *op)
 {
-while (++i <= end)
-{
-if (elem < *tab[i - 1] && elem > *tab[i])
-return (i);
+	op->ra = 0;
+	op->rb = 0;
+	op->rra = 0;
+	op->rrb = 0;
+	op->rr = 0;
+	op->rrr = 0;
 }
-}
-return (-1);
-}*/
 
-int		getmininsertidx(int **tab, int start, int end, int elem)
+void	optimize_op(t_op *op)
 {
+	while (op->ra > 0 && op->rb > 0)
+	{
+		op->rr++;
+		op->ra--;
+		op->rb--;
+	}
+	while (op->rra > 0 && op->rrb > 0)
+	{
+		op->rrr++;
+		op->rra--;
+		op->rrb--;
+	}
+}
+
+void	get_mininsertidx(int **tab, t_ps *t, t_op *op, int elem)
+{
+	int		start;
+	int		end;
 	int		i;
 	int		max;
 
+	start = t->top1 + 1;
+	end = t->top2;
 	i = start;
 	max = get_max(tab, start, end);
-	if (elem > *tab[max])
-		return (max - start);
+	if (elem > *tab[max] || elem < *tab[get_min(tab, start, end)])
+	{
+		op->rb += ((max - start) <= (end - start) / 2) ? max - start : 0;
+		op->rrb += ((max - start) > (end - start) / 2) ? end - max + 1 : 0;
+	}
 	else if (elem > *tab[start] && elem < *tab[end])
-		return (0);
+		return ;
 	else
 	{
 		while (++i <= end)
-		{
 			if (elem < *tab[i - 1] && elem > *tab[i])
-				return (i - start);
-		}
+			{
+				op->rb += ((i - start) <= (end - start) / 2) ? i - start : 0;
+				op->rrb += ((i - start) > (end - start) / 2) ? end - i + 1 : 0;
+			}
 	}
-	return (0);
 }
 
 int		get_mininsertcost(int **tab, t_ps *t)
 {
 	int		i;
-	int		score;
 	int		min;
 	int		midx;
+	t_op	op;
 
+	(void)tab;
 	i = -1;
-	min = t->top1 / 2;
 	midx = 0;
+	min = t->top2;
 	while (++i <= t->top1)
 	{
-		score = 0;
-		score = (i > t->top1 / 2) ? t->top1 - i  + 2 : i + 1;
-		if (t->top2 - t->top1 > 2)
-			score += getmininsertidx(tab, t->top1 + 1, t->top2, *tab[i]);
-		if (score < min)
+		init_op(&op);
+		op.ra += (i <= t->top1 / 2) ? i : 0;
+		op.rra += (i > t->top1 / 2) ? t->top1 - i + 1 : 0;
+		if (t->top2 - t->top1 > 1)
+			get_mininsertidx(tab, t, &op, *tab[i]);
+		optimize_op(&op);
+		//ft_printf("%d ra %d rb %d rr %d rra %d rrb %d rrr %d\n", *tab[i], op.ra, op.rb, op.rr, op.rra, op.rrb, op.rrr);
+		if ((op.ra + op.rb + op.rr + op.rra + op.rrb + op.rrr) < min)
 		{
-			min = score;
+			min = (op.ra + op.rb + op.rr + op.rra + op.rrb + op.rrr);
 			midx = i;
 		}
 	}
 	return (midx);
 }
+
+/*int		get_minmedcost(int **tab, t_ps *t, int med)
+{
+	int		i;
+	int		min;
+	int		midx;
+	t_op	op;
+
+	(void)tab;
+	i = -1;
+	midx = 0;
+	min = t->top2;
+	while (++i <= t->top1)
+	{
+		init_op(&op);
+		op.ra += (i <= t->top1 / 2) ? i : 0;
+		op.rra += (i > t->top1 / 2) ? t->top1 - i + 1 : 0;
+		if (t->top2 - t->top1 > 1)
+			get_mininsertidx(tab, t, &op, *tab[i]);
+		optimize_op(&op);
+		//ft_printf("%d ra %d rb %d rr %d rra %d rrb %d rrr %d\n", *tab[i], op.ra, op.rb, op.rr, op.rra, op.rrb, op.rrr);
+		if (*tab[i] > med)
+			op.ra += 500;
+		if ((op.ra + op.rb + op.rr + op.rra + op.rrb + op.rrr) < min)
+		{
+			min = (op.ra + op.rb + op.rr + op.rra + op.rrb + op.rrr);
+			midx = i;
+		}
+	}
+	return (midx);
+}*/
 
 int		getx(int **tab, t_ps *t, int idx1)
 {
@@ -147,13 +192,7 @@ void		apply_op(int **tab, t_ps *t, t_op *op)
 	}
 }
 
-void	init_op(t_op *op)
-{
-	op->ra = 0;
-	op->rb = 0;
-	op->rra = 0;
-	op->rrb = 0;
-}
+
 
 void	optimize(int **tab, t_ps *t, t_op *op, t_list **list)
 {
@@ -187,7 +226,7 @@ void	optimize(int **tab, t_ps *t, t_op *op, t_list **list)
 	*list = l;
 }
 
-int		get_minmedcost(int **tab, t_ps *t, int med)
+/*int		get_minmedcost(int **tab, t_ps *t, int med)
 {
 	int		i;
 	int		score;
@@ -211,180 +250,65 @@ int		get_minmedcost(int **tab, t_ps *t, int med)
 		}
 	}
 	return (midx);
-}
+}*/
 
 
 void	new_sort(int **tab, t_ps *t, t_op *op, t_list **steps)
 {
 	int		idx1;
 	int		idx2;
-	int		med;
-	int		t1;
+	//int		med;
+	//int		t1;
 
-	med = getmedian(tab, t->top1);
+	//med = getmedian(tab, t->top1);
 	//ft_printf("%d\n", med);
 	(void)op;
-	t1 = t->top1 / 2;
-	while (t->top1 > t1)
+	//t1 = t->top1 / 2;
+	//ft_printf("a\n");
+	while (t->top1 >= 0)
 	{
-		idx1 = get_minmedcost(tab, t, med);
-		if (t->top2 - t->top1 > 0)
-			idx2 = getx(tab, t, idx1);
-		else
-			idx2 = 0;
-		//ft_printf("idx1 %d idx2 %d\n", idx1, idx2); 
-		move_elem(t, idx1, steps);
-		move_elem(t, idx2, steps);
-		ft_lstpushback(steps, "pb", 2);
-		//ft_lstdump(steps);
-		optimize(tab, t, op, steps);
-		//apply_steps(tab, t, steps);
-		//t->top1--;
-		ft_lstdel(steps, ft_eldel);
-		*steps = NULL;
-	}
-	/*med = getmedian(tab, t->top1);
-	//ft_printf("%d\n", med);
-	t1 = t->top1 / 2;
-	(void)op;
-	while (t->top1 > t1)
-	{
-		idx1 = get_minmedcost(tab, t, med);
-		if (t->top2 - t->top1 > 0)
-			idx2 = getx(tab, t, idx1);
-		else
-			idx2 = 0;
-		//ft_printf("idx1 %d idx2 %d\n", idx1, idx2); 
-		move_elem(t, idx1, steps);
-		move_elem(t, idx2, steps);
-		ft_lstpushback(steps, "pb", 2);
-		//ft_lstdump(steps);
-		optimize(tab, t, op, steps);
-		//apply_steps(tab, t, steps);
-		//t->top1--;
-		ft_lstdel(steps, ft_eldel);
-		*steps = NULL;
-	}*/
-	/*med = getmedian(tab, t->top1);
-	//ft_printf("%d\n", med);
-	t1 = t->top1 / 2;
-	(void)op;
-	while (t->top1 > t1)
-	{
-		idx1 = get_minmedcost(tab, t, med);
-		if (t->top2 - t->top1 > 0)
-			idx2 = getx(tab, t, idx1);
-		else
-			idx2 = 0;
-		//ft_printf("idx1 %d idx2 %d\n", idx1, idx2); 
-		move_elem(t, idx1, steps);
-		move_elem(t, idx2, steps);
-		ft_lstpushback(steps, "pb", 2);
-		//ft_lstdump(steps);
-		optimize(tab, t, op, steps);
-		//apply_steps(tab, t, steps);
-		//t->top1--;
-		ft_lstdel(steps, ft_eldel);
-		*steps = NULL;
-	}
-	t1 = t->top1 / 2;
-	(void)op;
-	while (t->top1 > t1)
-	{
-		idx1 = get_minmedcost(tab, t, med);
-		if (t->top2 - t->top1 > 0)
-			idx2 = getx(tab, t, idx1);
-		else
-			idx2 = 0;
-		//ft_printf("idx1 %d idx2 %d\n", idx1, idx2); 
-		move_elem(t, idx1, steps);
-		move_elem(t, idx2, steps);
-		ft_lstpushback(steps, "pb", 2);
-		//ft_lstdump(steps);
-		optimize(tab, t, op, steps);
-		//apply_steps(tab, t, steps);
-		//t->top1--;
-		ft_lstdel(steps, ft_eldel);
-		*steps = NULL;
-	}*/
-	//ft_selection_sort(tab, t, steps);
-	/*while (t->top1 >= 0)
-	{
-		//idx1 = get_minmedcost(tab, t, med);
+		//ft_printf("b\n");
 		idx1 = get_mininsertcost(tab, t);
+		//ft_printf("b\n");
+		//idx1 = get_minmedcost(tab, t, med);
 		if (t->top2 - t->top1 > 0)
 			idx2 = getx(tab, t, idx1);
 		else
 			idx2 = 0;
-		//ft_printf("idx1 %d idx2 %d\n", idx1, idx2); 
-		move_elem(t, idx1, steps);
-		move_elem(t, idx2, steps);
+		//ft_printf("idx1 %d %d idx2 %d %d\n", idx1, *tab[idx1], idx2, *tab[idx2]);
+		//ft_printf("b\n");
+		//ft_printf("idx1 %d idx2 %d\n", idx1, idx2);
+		//if (*tab[0]
+		move_elem(tab, t, idx1, steps);
+		move_elem(tab, t, idx2, steps);
 		ft_lstpushback(steps, "pb", 2);
 		//ft_lstdump(steps);
 		optimize(tab, t, op, steps);
-		//apply_steps(tab, t, steps);
 		//t->top1--;
 		ft_lstdel(steps, ft_eldel);
 		*steps = NULL;
 	}
+	//ft_selection_sort(tab, t, 20, steps);
+	//apply_steps(tab, t, steps);
+	//ft_lstdel(steps, ft_eldel);
+	//*steps = NULL;
 	while (t->top1 < t->top2)
 		handler(tab, t, "pa", t->opt);
-	move_elem(t, get_min(tab, 0, t->top1), steps);*/
+	move_elem(tab, t, get_min(tab, 0, t->top1), steps);
 }
 
-void	neww_sort(int **tab, t_ps *t, t_op *op, t_list **steps)
+
+//stack_1 : [1] [74] [21] [7] [92] [19] [15] [89] [41] [45] [56] [31] [71] [84] [65] [57] [99] [63] [68] [32] [26] [62] [91] [12] [54] [70] [85] [95] [96] [72] [90] [58] [86] [43] [29] [8] [11] [66] [16] [30] [44] [60] [49] [98] [69] [97] [18] [17] [33] [78] [9] [53] [23] [100] [73] [10] [76] [75] [42] [50] [13] [40] [81] [6] [4] [3] [94]
+//stack_2 : [88] [93] [87] [83] [82] [80] [79] [77] [67] [64] [61] [59] [55] [52] [51] [48] [47] [46] [39] [38] [37] [36] [35] [34] [28] [27] [25] [24] [22] [20] [14] [5] [2]
+/*void	neww_sort(int **tab, t_ps *t, t_op *op, t_list **steps)
 {
 	int		idx1;
 	int		idx2;
 	int		med;
 	int		t1;
 
-	med = getmedian(tab, t->top1);
-	//ft_printf("%d\n", med);
-	(void)op;
 	t1 = t->top1 / 2;
-	while (t->top1 >= t1)
-	{
-		//idx1 = get_minmedcost(tab, t, med);
-		idx1 = get_mininsertcost(tab, t);
-		if (t->top2 - t->top1 > 0)
-			idx2 = getx(tab, t, idx1);
-		else
-			idx2 = 0;
-		//ft_printf("idx1 %d idx2 %d\n", idx1, idx2); 
-		move_elem(t, idx1, steps);
-		move_elem(t, idx2, steps);
-		ft_lstpushback(steps, "pb", 2);
-		//ft_lstdump(steps);
-		optimize(tab, t, op, steps);
-		//apply_steps(tab, t, steps);
-		//t->top1--;
-		ft_lstdel(steps, ft_eldel);
-		*steps = NULL;
-	}
-	while (t->top1 >= 0)
-		handler(tab, t, "pb", t->opt);
-	/*while (t->top1 > t1)
-	{
-		idx1 = get_minmedcost(tab, t, med);
-		if (t->top2 - t->top1 > 0)
-			idx2 = getx(tab, t, idx1);
-		else
-			idx2 = 0;
-		//ft_printf("idx1 %d idx2 %d\n", idx1, idx2); 
-		move_elem(t, idx1, steps);
-		move_elem(t, idx2, steps);
-		ft_lstpushback(steps, "pb", 2);
-		//ft_lstdump(steps);
-		optimize(tab, t, op, steps);
-		//apply_steps(tab, t, steps);
-		//t->top1--;
-		ft_lstdel(steps, ft_eldel);
-		*steps = NULL;
-	}*/
-
-	/*t1 = t->top1 / 2;
-	while (t1 >= 12)
+	while (t1 > 19)
 	{
 		med = getmedian(tab, t->top1);
 		t1 = t->top1 / 2;
@@ -395,8 +319,8 @@ void	neww_sort(int **tab, t_ps *t, t_op *op, t_list **steps)
 				idx2 = getx(tab, t, idx1);
 			else
 				idx2 = 0;
-			move_elem(t, idx1, steps);
-			move_elem(t, idx2, steps);
+			move_elem(tab, t, idx1, steps);
+			move_elem(tab, t, idx2, steps);
 			ft_lstpushback(steps, "pb", 2);
 			optimize(tab, t, op, steps);
 			ft_lstdel(steps, ft_eldel);
@@ -406,11 +330,8 @@ void	neww_sort(int **tab, t_ps *t, t_op *op, t_list **steps)
 	ft_selection_sort(tab, t, steps);
 	while (t->top1 < t->top2)
 		handler(tab, t, "pa", t->opt);
-	move_elem(t, get_min(tab, 0, t->top1), steps);*/
-}
-
-
-
+	//move_elem(t, get_min(tab, 0, t->top1), steps);
+}*/
 
 int		inner_main(int argc, char **argv, t_ps *t)
 {
@@ -419,6 +340,7 @@ int		inner_main(int argc, char **argv, t_ps *t)
 	t_op		op;
 
 	steps = NULL;
+	init_op(&op);
 	if (!(tab = ft_checknumbers(argc, argv, t->opt)))
 		return (ft_error(-1));
 	t->top1 = (t->opt > -1 && **argv != 'x') ? argc - 3 : argc - 2;
@@ -427,81 +349,22 @@ int		inner_main(int argc, char **argv, t_ps *t)
 		return (ft_error(-1));
 	//./push_swap -cv 45 74 16 7 71 99 98 24
 	/*if (t->top2 <= 2)
-	  small_sort(tab, t, &steps);
-	  else if (t->top2 <= 100)
-	  ft_selection_sort(tab, t, &steps);*/
-	/*handler(tab, t, "pb", t->opt); 
-	  handler(tab, t, "pb", t->opt); 
-	  handler(tab, t, "pb", t->opt); 
-	  ft_printf("minidx : %d\n", getmininsertidx(tab, t->top1 + 1, t->top2, 3) + t->top1 + 1);*/
-	//move_elem(t, 3, &steps);
-	//apply_steps(tab, t, &steps);
-	//ft_printf("minidx : %d\n", getmininsertidx(tab, t->top1 + 1, t->top2, 6));
-	//ft_dispstk(tab, t->top1, t->top2);
-	//handler(tab, t, "pb", t->opt); 
-	//handler(tab, t, "pb", t->opt);
-	//ft_printf("%d\n", getx(tab, t, 0));*/
-	/*ft_lstpushback(&steps, "pb", 2);
-	ft_lstpushback(&steps, "ra", 2);
-	ft_lstpushback(&steps, "ra", 2);
-	ft_lstpushback(&steps, "ra", 2);
-	ft_lstpushback(&steps, "ra", 2);
-	ft_lstpushback(&steps, "ra", 2);
-	ft_lstpushback(&steps, "ra", 2);
-	ft_lstpushback(&steps, "ra", 2);
-	ft_lstpushback(&steps, "ra", 2);
-	ft_lstpushback(&steps, "rb", 2);
-	ft_lstpushback(&steps, "rb", 2);
-	ft_lstpushback(&steps, "rb", 2);
-	ft_lstpushback(&steps, "rb", 2);
-	ft_lstpushback(&steps, "rb", 2);
-	ft_lstpushback(&steps, "pb", 2);
-	init_op(&op);
-	optimize(tab, t, &op, &steps);*/
-	//ft_printf("%d\n", op.ra);
-	/*if (t->top2 <= 2)
 		small_sort(tab, t, &steps);
 	else if (t->top2 <= 45)
-	  ft_selection_sort(tab, t, &steps);
-	else*/
-	/*ft_printf("%d\n", get_minmedcost(tab, t, 45));
-	handler(tab, t, "pb", t->opt);
-	ft_printf("%d\n", get_minmedcost(tab, t, 45));
-	handler(tab, t, "ra", t->opt);
-	handler(tab, t, "pb", t->opt);
-	ft_printf("%d\n", get_minmedcost(tab, t, 45));
-	handler(tab, t, "pb", t->opt);
-	ft_printf("%d\n", get_minmedcost(tab, t, 45));*/
-	/*handler(tab, t, "pb", t->opt);
-	ft_printf("%d\n", get_minmedcost(tab, t, 45));
-	handler(tab, t, "pb", t->opt);
-	ft_printf("%d\n", get_minmedcost(tab, t, 45));*/
-	neww_sort(tab, t, &op, &steps);
-	//ft_printf("%d\n", ft_printf("{red}toto{eoc}\n"));
-	/*int		med;
-
-	med = getmedian(tab, t->top1); 
-	ft_printf("%d\n", get_minmedcost(tab, t, med));*/
-	//optimize(tab, t, &op, &steps);
-	apply_steps(tab, t, &steps);
-	/*handler(tab, &t, "pb", opt); 
-	  handler(tab, &t, "pb", opt); 
-	  handler(tab, &t, "pb", opt);
-	  ft_printf("%d\n", get_mininsertcost(tab, &t));*/
-	//move_elem(tab, &t, get_mininsertcost(tab, &t), opt);
-	//move_elem(tab, &t, 5, opt);
-	//move_elem(tab, &t, 6, opt);
-	//move_elem(tab, &t, 7, opt);
-	//move_elem(tab, &t, 1, opt);
-	/*handler(tab, t, "pb", t->opt); 
-	  handler(tab, t, "pb", t->opt); 
-	  handler(tab, t, "pb", t->opt); 
-	  handler(tab, t, "pb", t->opt); 
-	  move_elem(t, 5, &steps);
-	  apply_steps(tab, t, &steps);*/
-	//move_elem(t, 2, &steps);
-	//move_elem(t, 3, &steps);
+		ft_selection_sort(tab, t, t->top2, &steps);*/
+	//else*/
+	new_sort(tab, t, &op, &steps);
+	//move_elem(tab, t, 1, &steps);
+	//handler
 	//move_elem(t, 4, &steps);
+	/*handler(tab, t, "pb", t->opt);
+	handler(tab, t, "pb", t->opt);
+	handler(tab, t, "pb", t->opt);
+	init_op(&op);
+	//get_mininsertidx(tab, t, &op, 14);
+	ft_printf("%d\n", get_mininsertcost(tab, t));*/
+	//ft_printf("rb %d rrb %d\n", op.rb, op.rrb);
+	apply_steps(tab, t, &steps);
 	if (**argv == 'x')
 		free2((void**)argv, tabsize(argv));
 	free2((void**)tab, t->top2);
