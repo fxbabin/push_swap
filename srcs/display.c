@@ -6,13 +6,13 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 22:16:38 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/10 15:34:45 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/14 15:27:00 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void		ft_dispstk(int **tab, int top1, int top2)
+void			ft_dispstk(int **tab, int top1, int top2)
 {
 	int		i;
 

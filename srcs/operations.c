@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 22:14:03 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/05 23:01:03 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/14 15:29:44 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void		rotate_t(int **tab, int top1, int top2, int b)
 	}
 }
 
-void    rotate_b(int **tab, int top1, int top2, int b)
+void		rotate_b(int **tab, int top1, int top2, int b)
 {
 	int		tmp;
 
@@ -56,7 +56,7 @@ void    rotate_b(int **tab, int top1, int top2, int b)
 	}
 }
 
-void	push(int **tab, int *top1, int top2, int b)
+void		push(int **tab, int *top1, int top2, int b)
 {
 	if ((b == 0 || b == 1) && *top1 >= 0)
 	{

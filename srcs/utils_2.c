@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/10 13:36:42 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/10 17:07:22 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/14 15:31:49 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int			**cpytab(int **tab, int size)
 
 void		apply_steps(int **tab, t_ps *t, t_list **list)
 {
-	t_list          *l;
+	t_list		*l;
 
 	if (!list || !*list)
 		return ;
@@ -41,10 +41,12 @@ void		apply_steps(int **tab, t_ps *t, t_list **list)
 		*list = (*list)->next;
 	}
 	*list = l;
+	ft_lstdel(list, ft_eldel);
+	*list = NULL;
 }
 
 void		ft_eldel(void *content, size_t content_size)
 {
 	(void)content_size;
-	content = NULL;
+	(void)content;
 }

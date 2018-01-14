@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 22:05:02 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/06 14:16:00 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/14 15:31:10 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void		free2(void **tab, int size)
 	free(tab);
 }
 
-char	**modif_argv(int argc, char **argv, int opt)
+char		**modif_argv(int argc, char **argv, int opt)
 {
 	char	*tmp;
 	int		idx;

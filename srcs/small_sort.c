@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/10 13:45:26 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/13 20:22:18 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/14 15:30:08 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ void	move_elem(int **tab, t_ps *t, int idx, t_list **steps)
 	(void)tab;
 	end = (idx <= t->top1) ? t->top1 : t->top2;
 	start = (idx <= t->top1) ? 0 : t->top1 + 1;
-	//if (end == t->top1 && get_min(tab, start, end) == 1)
-	//	ft_lstpushback(steps, "sa", 2);
 	if ((idx - start) <= (end - start) / 2)
 	{
 		while (idx-- > start)
@@ -53,10 +51,9 @@ int		small_sort(int **tab, t_ps *t, t_list **steps)
 	else if (max == 1 && t->top1 == 2)
 		ft_lstpushback(steps, "rra", 3);
 	apply_steps(tab, t, steps);
-	ft_lstdel(steps, ft_eldel);
-	*steps = NULL;
 	if (*tab[0] > *tab[1])
 		ft_lstpushback(steps, "sa", 2);
+	apply_steps(tab, t, steps);
 	return (0);
 }
 
@@ -66,6 +63,7 @@ void	ft_selection_sort(int **tab, t_ps *t, int len, t_list **steps)
 	int		min;
 	int		ret;
 
+	(void)len;
 	tmp = t->top1;
 	ret = 0;
 	while (tmp > 2)
@@ -82,8 +80,8 @@ void	ft_selection_sort(int **tab, t_ps *t, int len, t_list **steps)
 	}
 	if (!ret && tmp == 2)
 		small_sort(tab, t, steps);
-	while ((len-- - 2))
-		ft_lstpushback(steps, "pa", 2);
+	while (t->top1 < t->top2)
+		handler(tab, t, "pa", t->opt);
 }
 
 int		is_relsorted(int **tab, int start, int end)
