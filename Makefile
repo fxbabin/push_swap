@@ -6,7 +6,7 @@
 #    By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/05 22:43:45 by fbabin            #+#    #+#              #
-#    Updated: 2018/01/14 18:05:16 by fbabin           ###   ########.fr        #
+#    Updated: 2018/01/14 19:40:20 by fbabin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,11 +42,11 @@ _END=\x1b[0m
 all: $(CHECKER) $(PUSH_SWAP)
 
 $(CHECKER): $(LIBFT) $(C_OBJS)
-		@$(CC) -o $(CHECKER) $(C_OBJS) -L$(LIB_DIR) -lft -I includes
+		@$(CC) $(CFLAGS) -o $(CHECKER) $(C_OBJS) -L$(LIB_DIR) -lft -I includes
 		@echo "$(CHECKER) : $(_GREEN)Done$(_END)"
 
 $(PUSH_SWAP): $(LIBFT) $(PS_OBJS)
-		@$(CC) -o $(PUSH_SWAP) $(PS_OBJS) -L$(LIB_DIR) -lft -I includes
+		@$(CC) $(CFLAGS) -o $(PUSH_SWAP) $(PS_OBJS) -L$(LIB_DIR) -lft -I includes
 		@echo "$(PUSH_SWAP) : $(_GREEN)Done$(_END)"
 
 $(LIBFT):

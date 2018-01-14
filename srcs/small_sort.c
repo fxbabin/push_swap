@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/10 13:45:26 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/14 18:13:58 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/14 22:14:27 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int		small_sort(int **tab, t_ps *t, t_list **steps)
 	else if (max == 1 && t->top1 == 2)
 		ft_lstpushback(steps, "rra", 3);
 	apply_steps(tab, t, steps);
-	if (*tab[0] > *tab[1])
+	if (t->top1 > 0 && *tab[0] > *tab[1])
 		ft_lstpushback(steps, "sa", 2);
 	apply_steps(tab, t, steps);
 	return (0);

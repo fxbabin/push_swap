@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 20:54:52 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/14 17:42:59 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/14 23:11:45 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int		inner_main(int argc, char **argv, t_ps *t)
 	t->top2 = t->top1;
 	if (!(ft_checkdoubles(tab, t->top2)))
 		return (ft_error(-1));
+	if (is_sorted(tab, t->top1, t->top2))
+		return (0);
 	if (t->top2 <= 2)
 		small_sort(tab, t, &steps);
 	else if (t->top2 <= 5)

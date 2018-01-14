@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 22:09:03 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/07 12:10:37 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/14 22:17:00 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,17 +111,21 @@ int			ft_checkins(char *line, int **tab, int *top1, int top2)
 
 int			is_sorted(int **tab, int top1, int top2)
 {
+	int		**stab;
 	int		i;
 
-	i = 0;
+	i = -1;
 	if (top1 < top2)
 		return (0);
 	if (top2 == 0)
 		return (1);
+	stab = cpytab(tab, top2);
+	ft_quicksort(stab, 0, top2);
 	while (++i <= top2)
 	{
-		if (*tab[i - 1] >= *tab[i])
+		if (*tab[i] != *stab[i])
 			return (0);
 	}
+	free2((void**)stab, top2);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 13:44:39 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/13 16:03:22 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/14 23:02:53 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int		main(int argc, char **argv)
 
 	line = NULL;
 	if (argc < 2)
-		return (ft_error(-1));
+		return (0);
 	argv = modif_argv(argc, argv, -1);
 	argc = (argc != tabsize(argv)) ? tabsize(argv) : argc;
 	top1 = argc - 2;

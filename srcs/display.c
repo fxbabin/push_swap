@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 22:16:38 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/14 15:27:00 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/14 22:11:00 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,10 @@ void			handler(int **tab, t_ps *t, const char *s, int opt)
 {
 	if (s[0] == 's')
 	{
-		(s[1] == 'a' || s[1] == 's') ? ft_swap(tab[0], tab[1]) : 0;
-		if (s[1] == 'b' || s[1] == 's')
-			ft_swap(tab[t->top1 + 1], tab[t->top1 + 2]);
+		(t->top1 > 0 && (s[1] == 'a' || s[1] == 's'))
+			? ft_swap(tab[0], tab[1]) : 0;
+		((t->top2 - t->top1 + 1 > 1) && (s[1] == 'b' || s[1] == 's')) ?
+			ft_swap(tab[t->top1 + 1], tab[t->top1 + 2]) : 0;
 	}
 	if (s[0] == 'p')
 	{
