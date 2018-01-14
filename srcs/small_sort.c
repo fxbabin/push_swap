@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/10 13:45:26 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/14 15:30:08 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/14 18:13:58 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,48 +82,4 @@ void	ft_selection_sort(int **tab, t_ps *t, int len, t_list **steps)
 		small_sort(tab, t, steps);
 	while (t->top1 < t->top2)
 		handler(tab, t, "pa", t->opt);
-}
-
-int		is_relsorted(int **tab, int start, int end)
-{
-	int		i;
-	int		min;
-
-	min = get_min(tab, start, end);
-	i = min;
-	while (++i <= end)
-		if (*tab[i - 1] > *tab[i])
-			return (0);
-	i = start;
-	if (min > 0)
-	{
-		if (*tab[end] > *tab[0])
-			return (0);
-		while (++i <= min - 1)
-			if (*tab[i - 1] > *tab[i])
-				return (0);
-	}
-	return (1);
-}
-
-int		is_relrsorted(int **tab, int start, int end)
-{
-	int		i;
-	int		max;
-
-	max = get_max(tab, start, end);
-	i = max;
-	while (++i <= end)
-		if (*tab[i - 1] < *tab[i])
-			return (0);
-	i = start;
-	if (max > 0)
-	{
-		if (*tab[end] < *tab[0])
-			return (0);
-		while (++i <= max - 1)
-			if (*tab[i - 1] < *tab[i])
-				return (0);
-	}
-	return (1);
 }

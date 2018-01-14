@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/10 11:57:59 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/14 15:25:46 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/14 18:13:22 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,6 @@ int				getopts(const char *opt)
 		}
 	}
 	return (i);
-}
-
-int				getmedian(int **tab, int top)
-{
-	int		**stab;
-	int		med;
-
-	stab = cpytab(tab, top);
-	ft_quicksort(stab, 0, top);
-	med = *stab[top / 2];
-	free2((void**)stab, top - 1);
-	return (med);
 }
 
 int				get_min(int **tab, int start, int end)

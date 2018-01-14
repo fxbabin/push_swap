@@ -6,12 +6,12 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 13:52:45 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/14 18:05:57 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/14 18:14:08 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP
-# define PUSH_SWAP
+#ifndef PUSH_SWAP_H
+# define PUSH_SWAP_H
 
 /*
 ** --------------------------------- INCLUDES -------------------------------
@@ -25,22 +25,22 @@
 ** -------------------------------- STRUCTURES -------------------------------
 */
 
-typedef struct		s_ps
+typedef struct	s_ps
 {
-	int				top1;
-	int				top2;
-	int				opt;
-}					t_ps;
+	int			top1;
+	int			top2;
+	int			opt;
+}				t_ps;
 
-typedef struct		s_op
+typedef struct	s_op
 {
-	int				ra;
-	int				rb;
-	int				rr;
-	int				rra;
-	int				rrb;
-	int				rrr;
-}					t_op;
+	int			ra;
+	int			rb;
+	int			rr;
+	int			rra;
+	int			rrb;
+	int			rrr;
+}				t_op;
 
 /*
 ** ----------------------------------------------------------------------------
@@ -67,8 +67,6 @@ int				ft_checkdoubles(int **tab, int argc);
 int				ft_checkinr(char *line, int **tab, int *top1, int top2);
 int				ft_checkins(char *line, int **tab, int *top1, int top2);
 int				is_sorted(int **tab, int top1, int top2);
-int				is_relsorted(int **tab, int start, int end);
-int				is_relrsorted(int **tab, int start, int end);
 
 /*
 ** ---------------------------- OPERATIONS FUNCTIONS ---------------------------
@@ -91,7 +89,6 @@ void			handler(int **tab, t_ps *t, const char *s, int opt);
 */
 
 int				getopts(const char *opt);
-int				getmedian(int **tab, int top);
 int				get_min(int **tab, int start, int end);
 int				get_max(int **tab, int start, int end);
 void			get_mininsertidx(int **tab, t_ps *t, t_op *op, int elem);
