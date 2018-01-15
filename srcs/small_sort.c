@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/10 13:45:26 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/14 22:14:27 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/15 13:36:46 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,9 @@ void	ft_selection_sort(int **tab, t_ps *t, int len, t_list **steps)
 			break ;
 		ft_lstpushback(steps, "pb", 2);
 		apply_steps(tab, t, steps);
-		ft_lstdel(steps, ft_eldel);
-		*steps = NULL;
 		tmp--;
 	}
-	if (!ret && tmp == 2)
+	if (!ret)
 		small_sort(tab, t, steps);
 	while (t->top1 < t->top2)
 		handler(tab, t, "pa", t->opt);
