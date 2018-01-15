@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 22:09:03 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/15 15:48:17 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/15 16:33:59 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ int			**ft_checknumbers(int argc, char **argv, int opt)
 	while (++i < argc)
 	{
 		nb = (argv[i][0] == '-') ? 1 : 0;
-		if (!ft_strbspn(argv[i] + nb, "0123456789"))
-			return (ft_free2((void**)tab, argc - b));
+		if (!ft_strbspn(argv[i] + nb, "+0123456789"))
+			return (ft_free2((void**)tab, argc - b - 1));
 		nb = ft_atoi(argv[i]);
 		if (nb != ft_atol(argv[i]))
 		{
-			free2((void**)tab, argc - b);
+			free2((void**)tab, argc - b - 1);
 			return (NULL);
 		}
 		*tab[i - b] = nb;
