@@ -6,7 +6,7 @@
 #    By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/05 22:43:45 by fbabin            #+#    #+#              #
-#    Updated: 2018/01/16 15:56:06 by fbabin           ###   ########.fr        #
+#    Updated: 2018/01/16 17:10:43 by fbabin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,8 @@ _PS_SRCS		+=	$(_SRCS)
 _C_SRCS			=	checker.c 
 _C_SRCS			+=	$(_SRCS)
 _LIBFT			=	libft.a
+HEADER_DIR		=	includes
+HEADER			=	$(HEADER_DIR)/push_swap.h
 
 SRCS_DIR		= srcs
 LIB_DIR			= libft
@@ -41,19 +43,19 @@ _END=\x1b[0m
 
 all: $(CHECKER) $(PUSH_SWAP)
 
-$(CHECKER): $(LIBFT) $(C_OBJS)
-		@$(CC) $(CFLAGS) -o $(CHECKER) $(C_OBJS) -L$(LIB_DIR) -lft -I includes
+$(CHECKER): $(HEADER) $(LIBFT) $(LIBFT) $(C_OBJS)
+		@$(CC) $(CFLAGS) -o $(CHECKER) $(C_OBJS) -L$(LIB_DIR) -lft -I $(HEADER_DIR)
 		@echo "$(CHECKER) : $(_GREEN)Done$(_END)"
 
-$(PUSH_SWAP): $(LIBFT) $(PS_OBJS)
-		@$(CC) $(CFLAGS) -o $(PUSH_SWAP) $(PS_OBJS) -L$(LIB_DIR) -lft -I includes
+$(PUSH_SWAP): $(HEADER) $(LIBFT) $(LIBFT) $(PS_OBJS)
+		@$(CC) $(CFLAGS) -o $(PUSH_SWAP) $(PS_OBJS) -L$(LIB_DIR) -lft -I $(HEADER_DIR)
 		@echo "$(PUSH_SWAP) : $(_GREEN)Done$(_END)"
 
 $(LIBFT):
 		@make -C $(LIB_DIR)
 
 %.o : %.c
-		@$(CC) $(CFLAGS) -c $< -o $@ -I includes
+		@$(CC) $(CFLAGS) -c $< -o $@ -I $(HEADER_DIR)
 
 clean:
 		@make fclean -C $(LIB_DIR)
