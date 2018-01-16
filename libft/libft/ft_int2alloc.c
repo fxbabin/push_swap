@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 15:16:45 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/16 15:17:30 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/16 15:34:07 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		**ft_int2alloc(size_t size, size_t len)
 	if (!(t = (int**)ft_memalloc((size + 1) * sizeof(int*))))
 		return (NULL);
 	while (++i < size)
-		if (!(t[i] = (int*)ft_memalloc((len + 1) * sizeof(int))))
+		if (!(t[i] = (int*)ft_memalloc(len * sizeof(int))))
 			return (NULL);
 	return (t);
 }
