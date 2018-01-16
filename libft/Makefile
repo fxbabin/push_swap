@@ -6,7 +6,7 @@
 #    By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/09 17:49:24 by fbabin            #+#    #+#              #
-#    Updated: 2018/01/16 15:27:33 by fbabin           ###   ########.fr        #
+#    Updated: 2018/01/16 22:28:09 by fbabin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,11 +82,11 @@ $(NAME): $(OBJS)
 
 clean:
 		@/bin/rm -f $(OBJS)
-		@echo "clean : $(_GREEN)Done$(_END)"
+		@echo "libft clean : $(_GREEN)Done$(_END)"
 
 fclean: clean
 		@/bin/rm -f $(NAME)
-		@echo "fclean : $(_GREEN)Done$(_END)"
+		@echo "libft fclean : $(_GREEN)Done$(_END)"
 
 re:
 		@make fclean
