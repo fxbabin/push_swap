@@ -6,7 +6,7 @@
 #    By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/05 22:43:45 by fbabin            #+#    #+#              #
-#    Updated: 2018/01/14 19:40:20 by fbabin           ###   ########.fr        #
+#    Updated: 2018/01/16 14:33:51 by fbabin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ CHECKER			= checker
 PUSH_SWAP		= push_swap
 
 CC				= gcc
-CFLAGS			= -Wall -Werror -Wextra
+CFLAGS			= -Wall -Werror -Wextra -g3 -fsanitize=address
 
 _SRCS			=	checks.c display.c operations.c utils.c utils_2.c gets.c \
 					small_sort.c min_costcalc.c opti_sort.c optimize.c \

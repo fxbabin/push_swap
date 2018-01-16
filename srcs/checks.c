@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 22:09:03 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/15 16:33:59 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/16 15:29:55 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int			**ft_checknumbers(int argc, char **argv, int opt)
 
 	tab = NULL;
 	b = (opt > -1 && **argv != 'x') ? 2 : 1;
-	if (!(tab = (int**)ft_memalloc2(argc - b, 1)))
+	if (!(tab = ft_int2alloc(argc - b, 1)))
 		return (NULL);
 	tab[argc - b] = NULL;
 	i = b - 1;
