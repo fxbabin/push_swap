@@ -6,7 +6,7 @@
 /*   By: fbabin <fbabin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 20:54:52 by fbabin            #+#    #+#             */
-/*   Updated: 2018/01/16 16:08:15 by fbabin           ###   ########.fr       */
+/*   Updated: 2018/01/19 14:51:14 by fbabin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int		inner_main(int argc, char **argv, t_ps *t)
 		advselection_sort(tab, t, &op, &steps);
 	else
 		opti_sort(tab, t, &op, &steps);
-	if (**argv == 'x')
+	if (*argv && **argv == 'x')
 		free2((void**)argv, tabsize(argv));
 	free2((void**)tab, t->top2);
 	(steps) ? ft_lstdel(&steps, ft_eldel) : 0;
