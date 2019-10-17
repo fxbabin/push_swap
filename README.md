@@ -50,3 +50,18 @@ OK
 $> echo "sa" | ./checker "5 3 9 1 4"
 KO
 ```
+
+## Algorithm Explanation
+
+The algorithm implemented is based on the cost (number of moves needed) to push a number from stack_A to stack_B in a sorted order. Thus, all number in stack_B are sorted and the stack_A is just considered a pool of unsorted numbers.
+
+## Results
+
+| Array size| avg number of moves (approximately)|
+| --- | --- |
+| 3 | 1 |
+| 5 | 6 |
+| 100 | 600 |
+| 500 | 5200 |
+
+### Final Mark (119/125)
