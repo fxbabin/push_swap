@@ -6,7 +6,10 @@ Push_swap is a 42 project made for sorting algorithm exploration. The constraint
 
 To realize the sorting algorithm we must use 2 stacks (structured as we want in our code) 
 
+
+<p align="center">
 <img src="imgs/stacks.png" alt="drawing" width="200"/>
+<p/>
 
 and the following operations :
 
